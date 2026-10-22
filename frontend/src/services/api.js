@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-// Criação da instância do Axios com o endereço base da API FastAPI
+// Criação da instância do Axios conectada ao backend em nuvem (Render)
 const api = axios.create({
-  baseURL: 'http://127.0.0.1:8000', // Endereço padrão onde o FastAPI executa
+  baseURL: 'https://enquete-comunidade-senac.onrender.com',
   headers: {
     'Content-Type': 'application/json',
   },
