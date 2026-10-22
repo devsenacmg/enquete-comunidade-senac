@@ -1,24 +1,21 @@
-# 📊 Enquete Comunidade Senac
+# Enquete Comunidade Senac 🗳️
 
-Aplicação web desenvolvida para a realização e gestão de enquetes com a comunidade do Senac.
+Aplicação web desenvolvida para criar e gerir enquetes interativas para a comunidade Senac, permitindo votação em tempo real e visualização de resultados. Este projeto tem como principal objetivo o **aprendizado prático do desenvolvimento full stack**, documentando cada decisão e evolução técnica.
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## 🚀 Stack Tecnológica
 
 ### **Backend**
-* **Python 3.14**
-* **FastAPI** — Framework web moderno para construção de APIs RESTful.
-* **SQLAlchemy** — ORM para mapeamento objeto-relacional e comunicação com o banco de dados.
-* **PostgreSQL / Supabase** — Banco de dados relacional e infraestrutura em nuvem.
-* **Uvicorn** — Servidor ASGI de alta performance.
+* **Python / FastAPI:** Framework web de alta performance para a construção da API.
+* **Supabase / PostgreSQL:** Base de dados relacional na nuvem para persistência dos dados.
+* **SQLAlchemy:** ORM (Object-Relational Mapping) para a gestão das tabelas e consultas.
 
-### **Frontend** *(Próxima Etapa)*
-* **React**
-
-### **Ferramentas & Versionamento**
-* **Git & GitHub**
-* **VS Code**
+### **Frontend**
+* **React + Vite:** Biblioteca moderna para construção de componentes de interface rápidos e leves.
+* **Tailwind CSS:** Framework de estilização baseada em utilitários para um design limpo e responsivo.
+* **Axios:** Cliente HTTP para gerir a comunicação assíncrona entre o frontend e a API.
+* **Lucide React:** Biblioteca de ícones modernos e minimalistas.
 
 ---
 
@@ -26,71 +23,65 @@ Aplicação web desenvolvida para a realização e gestão de enquetes com a com
 
 ```text
 enquete-comunidade-senac/
-├── .venv/               # Ambiente virtual Python (ignorado pelo Git)
-├── .gitignore           # Configuração de arquivos ignorados no versionamento
-├── requirements.txt     # Dependências do projeto Python
-├── README.md            # Documentação técnica do repositório
-└── backend/             # Código-fonte da API em FastAPI
-    └── main.py          # Ponto de entrada e rotas da aplicação
+├── backend/          # API FastAPI, modelos e conexão com base de dados
+├── frontend/         # Aplicação React + Vite (Componentes, UI e Serviços)
+└── README.md         # Documentação e histórico de evolução do projeto
 ```
 
 ---
 
-## 🚀 O Que Foi Realizado Até Agora
+## ⏳ Linha do Tempo e Histórico de Desenvolvimento
 
-### 1. **Estrutura Backend e Banco de Dados**
-* Configuração do ambiente virtual (`.venv`) e instalação das dependências essenciais.
-* Criação e estruturação da API com **FastAPI**.
-* Integração e configuração do **SQLAlchemy** conectado à instância PostgreSQL no **Supabase**.
-* Mapeamento de rotas e criação do arquivo de dependências `requirements.txt`.
+> *Este registo serve como um diário de bordo para consulta, revisão de conceitos e aprendizado contínuo.*
 
-### 2. **Versionamento e Repositório GitHub**
-* Inicialização do repositório Git local e aplicação do `.gitignore` para exclusão de ambientes virtuais e arquivos sensíveis.
-* Resolução de permissões via **Personal Access Token (PAT)** no Git Credentials.
-* Publicação do repositório no repositório remoto: [`devsenacmg/enquete-comunidade-senac`](https://github.com/devsenacmg/enquete-comunidade-senac).
+### **Fase 1: Configuração do Backend e Base de Dados**
+* **Objetivo:** Estabelecer a fundação do projeto no lado do servidor e ligar à base de dados.
+* **Ações Executadas:**
+  * Criação do ambiente virtual Python (`.venv`) e instalação do FastAPI e SQLAlchemy.
+  * Configuração da conexão com o **Supabase (PostgreSQL)**.
+  * Estruturação inicial do repositório Git com controlo de versões e resolução de conflitos de credenciais via PAT (Personal Access Token).
+
+### **Fase 2: Estruturação e Inicialização do Frontend**
+* **Objetivo:** Criar a interface de utilizador utilizando ferramentas modernas de mercado.
+* **Ações Executadas:**
+  * Instalação do **Node.js** e inicialização do projeto React utilizando o **Vite**.
+  * Instalação e configuração do **Tailwind CSS** para estilização rápida e responsiva.
+  * Instalação de pacotes auxiliares: **Lucide React** (para ícones) e **Axios** (para requisições HTTP).
+  * Resolução de erros comuns de resolução de módulos e dependências do ambiente Node.
+
+### **Fase 3: Desenvolvimento de Componentes e Design da UI**
+* **Objetivo:** Desenvolver a experiência visual com base no layout planeado para as enquetes.
+* **Ações Executadas:**
+  * Criação do componente principal com cabeçalho institucional, cartão de perguntas e opções de voto dinâmicas.
+  * Implementação de estados locais em React (`useState`) para gerir a seleção visual das opções e a transição para a tela de agradecimento pós-voto.
+
+### **Fase 4: Integração Frontend & Backend (Em Desenvolvimento)**
+* **Objetivo:** Ligar a interface criada à API do FastAPI.
+* **Ações Executadas:**
+  * Criação do serviço centralizado de API (`src/services/api.js`) com o Axios configurado para apontar para `http://127.0.0.1:8000`.
+  * Preparação dos hooks de ciclo de vida (`useEffect`) para consumo dinâmico dos dados da enquete diretamente da base de dados.
 
 ---
 
-## 💻 Como Rodar o Projeto Localmente
+## ⚙️ Como Executar o Projeto Localmente
 
-### **Prerequisites**
-* Python 3.10+ instalado.
-* Git instalado.
-
-### **Passos para execução:**
-
-1. **Clonar o repositório:**
-   ```bash
-   git clone https://github.com/devsenacmg/enquete-comunidade-senac.git
-   cd enquete-comunidade-senac
+### **1. Executar o Backend**
+1. Ativa o ambiente virtual do Python:
+   ```powershell
+   .venv\Scripts\Activate
    ```
-
-2. **Criar e ativar o ambiente virtual:**
-   * **Windows (PowerShell):**
-     ```powershell
-     python -m venv .venv
-     .\.venv\Scripts\Activate.ps1
-     ```
-   * **Linux / macOS:**
-     ```bash
-     python3 -m venv .venv
-     source .venv/bin/activate
-     ```
-
-3. **Instalar as dependências:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Executar a API com Uvicorn:**
-   ```bash
+2. Inicia o servidor FastAPI com recarregamento automático:
+   ```powershell
    uvicorn backend.main:app --reload
    ```
-   A API estará acessível em `http://127.0.0.1:8000` e a documentação interativa Swagger em `http://127.0.0.1:8000/docs`.
 
----
-
-## 📌 Próximos Passos
-* [ ] Inicialização da aplicação **React** no diretório do projeto.
-* [ ] Criação dos componentes de interface da enquete.
-* [ ] Integração do Frontend React com as rotas do Backend FastAPI.
+### **2. Executar o Frontend**
+1. Abre um novo terminal e navega até à pasta do frontend:
+   ```powershell
+   cd frontend
+   ```
+2. Inicia o servidor de desenvolvimento do Vite:
+   ```powershell
+   npm run dev
+   ```
+3. Acede no navegador através do endereço: `http://localhost:5173/`
