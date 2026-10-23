@@ -68,7 +68,8 @@ export default function App() {
 
   // Estado do menu aberto ou fechado
   const [dropdownPerfilAberto, setDropdownPerfilAberto] = useState(false);
-
+  const [dropdownFiltroAberto, setDropdownFiltroAberto] = useState(false);
+  
   const showToast = (message) => {
     setToastMessage(message);
     setTimeout(() => setToastMessage(null), 4000);
@@ -579,16 +580,70 @@ export default function App() {
 
                 <div className="flex items-center gap-2">
                   <Filter className="w-4 h-4 text-slate-500" />
-                  <select
-                    value={filterCategory}
-                    onChange={(e) => setFilterCategory(e.target.value)}
-                    className="text-xs bg-white border border-slate-300 rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-orange-500 font-medium"
-                  >
-                    <option value="Todas">Todas as Categorias</option>
-                    {CATEGORIES.map(c => (
-                      <option key={c.id} value={c.id}>{c.label}</option>
-                    ))}
-                  </select>
+                  <div className="relative">
+                  {/* Botão principal do filtro */}
+                    <button
+                      type="button"
+                      onClick={() => setDropdownFiltroAberto(!dropdownFiltroAberto)}
+                      className="px-3.5 py-1.5 bg-white border border-slate-300 rounded-lg flex items-center gap-2 text-xs font-semibold text-slate-700 shadow-sm hover:border-slate-400 focus:ring-2 focus:ring-orange-500 outline-none transition"
+                    >
+                      <span>{filterCategory === 'Todas' ? 'Todas as Categorias' : filterCategory}</span>
+                      <svg 
+                        className={`w-3.5 h-3.5 text-slate-500 transition-transform duration-200 ${dropdownFiltroAberto ? 'rotate-180 text-orange-500' : ''}`} 
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+
+                  {/* Menu Suspenso Customizado com bordas arredondadas */}
+                  {dropdownFiltroAberto && (
+                    <div className="absolute right-0 mt-1.5 w-52 bg-white border border-slate-200 rounded-xl shadow-xl overflow-hidden z-30 divide-y divide-slate-100">
+                      
+                      {/* Opção "Todas as Categorias" */}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFilterCategory('Todas');
+                          setDropdownFiltroAberto(false);
+                        }}
+                        className={`w-full text-left px-3.5 py-2.5 text-xs transition-colors flex items-center justify-between ${
+                          filterCategory === 'Todas'
+                            ? 'bg-orange-50 font-bold text-orange-600'
+                            : 'text-slate-700 hover:bg-slate-50'
+                        }`}
+                      >
+                        <span>Todas as Categorias</span>
+                        {filterCategory === 'Todas' && <span className="text-orange-500 font-bold">✓</span>}
+                      </button>
+
+                      {/* Categorias Mapeadas */}
+                      {CATEGORIES.map((cat) => {
+                        const isSelected = filterCategory === cat.id;
+                        return (
+                          <button
+                            key={cat.id}
+                            type="button"
+                            onClick={() => {
+                              setFilterCategory(cat.id);
+                              setDropdownFiltroAberto(false);
+                            }}
+                            className={`w-full text-left px-3.5 py-2.5 text-xs transition-colors flex items-center justify-between ${
+                              isSelected
+                                ? 'bg-orange-50 font-bold text-orange-600'
+                                : 'text-slate-700 hover:bg-slate-50'
+                            }`}
+                          >
+                            <span>{cat.label}</span>
+                            {isSelected && <span className="text-orange-500 font-bold">✓</span>}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
                 </div>
               </div>
 
