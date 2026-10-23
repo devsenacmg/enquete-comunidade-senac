@@ -48,6 +48,14 @@ export default function App() {
   const [filterCategory, setFilterCategory] = useState('Todas');
   const [toastMessage, setToastMessage] = useState(null);
 
+  // Rola a página para o topo sempre que mudar de aba
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'auto'
+    });
+  }, [activeTab]);
+
   // Estado do Formulário (Mapeado para a tabela do Supabase)
   const [formData, setFormData] = useState({
     bairro: '',
