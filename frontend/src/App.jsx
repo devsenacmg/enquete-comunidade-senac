@@ -83,37 +83,41 @@ export default function App() {
   }, []);
 
   // Envio do Formulário para a API
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!formData.bairro || !formData.descricao) {
-      showToast('⚠️ Por favor, preencha os campos obrigatórios (*).');
-      return;
-    }
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      if (!formData.bairro || !formData.descricao) {
+        showToast('⚠️ Por favor, preencha os campos obrigatórios (*).');
+        return;
+      }
 
-    try {
-      setEnviando(true);
-      await api.post('/api/enquetes', formData);
+      try {
+        setEnviando(true);
+        await api.post('/api/enquetes', formData);
 
-      // Limpar formulário
-      setFormData({
-        bairro: '',
-        perfil: 'Morador',
-        categoria: 'Infraestrutura',
-        frequencia: 'Diariamente',
-        descricao: '',
-        sugestao_sistema: ''
-      });
+        // Limpar formulário
+        setFormData({
+          bairro: '',
+          perfil: 'Morador',
+          categoria: 'Infraestrutura',
+          frequencia: 'Diariamente',
+          descricao: '',
+          sugestao_sistema: ''
+        });
 
-      showToast('🎉 Sua demanda foi cadastrada com sucesso no Supabase!');
-      carregarEnquetes();
-      setActiveTab('dashboard');
-    } catch (err) {
-      console.error("Erro ao enviar demanda:", err);
-      showToast('❌ Erro ao enviar proposta. Verifique a conexão.');
-    } finally {
-      setEnviando(false);
-    }
-  };
+        showToast('🎉 Sua demanda foi cadastrada com sucesso no Supabase!');
+        await carregarEnquetes();
+        
+        // Direciona para o Painel & Ideias e rola a página para o topo
+        setActiveTab('dashboard');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      } catch (err) {
+        console.error("Erro ao enviar demanda:", err);
+        showToast('❌ Erro ao enviar proposta. Verifique a conexão.');
+      } finally {
+        setEnviando(false);
+      }
+    };
 
   // Votar em uma demanda (Upvote no Supabase)
   const handleVotar = async (id) => {
@@ -254,7 +258,7 @@ export default function App() {
           </div>
           
           <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
-            Qual problema social ou empresarial que você enfrenta no seu cotidiano que pode ser <span className="text-orange-400 underline decoration-orange-500/50 underline-offset-4">resolvido com tecnologia?</span>
+            Qual problema social ou empresarial você enfrenta no seu cotidiano que pode ser <span className="text-orange-400 underline decoration-orange-500/50 underline-offset-4">resolvido com tecnologia?</span>
           </h2>
           
           <p className="text-blue-100 text-base sm:text-lg max-w-2xl mx-auto font-normal leading-relaxed">
@@ -439,7 +443,7 @@ export default function App() {
               <div>
                 <h3 className="text-2xl font-bold text-blue-950 flex items-center gap-2">
                   <BarChart3 className="w-6 h-6 text-orange-500" />
-                  Painel de Demandas (Supabase)
+                  Painel de Demandas
                 </h3>
                 <p className="text-slate-600 text-sm">
                   Dados em tempo real extraídos do banco de dados via FastAPI.
