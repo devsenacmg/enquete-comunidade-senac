@@ -183,21 +183,33 @@ export default function App() {
       )}
 
       {/* HEADER INSTITUCIONAL SENAC */}
-      <header className="bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-900 text-white sticky top-0 z-40 shadow-lg border-b border-orange-500/30">
+      <header className="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             
-            {/* Branding SENAC MG */}
+            {/* Branding SENAC MG com Fundo Claro */}
             <div className="flex items-center space-x-3">
-              <div className="bg-orange-500 text-white p-2.5 rounded-lg font-black text-xl tracking-wider shadow-md">
-                SENAC
-              </div>
+              {/* Logo Oficial do Senac em Imagem */}
+              <img 
+                src="https://www.mg.senac.br/image/company_logo?img_id=33792" 
+                alt="Senac em Minas" 
+                className="h-10 w-auto object-contain"
+              />
+
+              {/* Divisor vertical discreto */}
+              <div className="h-8 w-px bg-slate-200 hidden sm:block"></div>
+
+              {/* Textos em Azul */}
               <div>
-                <h1 className="font-bold text-lg sm:text-xl leading-tight text-white flex items-center gap-2">
+                <h1 className="font-bold text-lg sm:text-xl leading-tight text-slate-900 flex items-center gap-2">
                   Enquete Comunidade
-                  <span className="text-xs bg-orange-500/20 text-orange-300 border border-orange-400/30 px-2 py-0.5 rounded-full hidden md:inline-block">MG</span>
+                  <span className="text-xs bg-blue-100 text-blue-900 border border-blue-200 px-2 py-0.5 rounded-full hidden md:inline-block font-semibold">
+                    MG
+                  </span>
                 </h1>
-                <p className="text-xs text-blue-200">Projeto Integrador: Soluções Tecnológicas</p>
+                <p className="text-xs text-blue-700 font-medium">
+                  Projeto Integrador: Soluções Tecnológicas
+                </p>
               </div>
             </div>
 
