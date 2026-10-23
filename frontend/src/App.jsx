@@ -343,9 +343,7 @@ export default function App() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
-                      Seu Perfil
-                    </label>
+                    
                     <div className="relative">
                       <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
                         Seu Perfil
