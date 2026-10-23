@@ -66,6 +66,9 @@ export default function App() {
     sugestao_sistema: ''
   });
 
+  // Estado do menu aberto ou fechado
+  const [dropdownPerfilAberto, setDropdownPerfilAberto] = useState(false);
+
   const showToast = (message) => {
     setToastMessage(message);
     setTimeout(() => setToastMessage(null), 4000);
@@ -295,7 +298,7 @@ export default function App() {
           </h2>
           
           <p className="text-blue-100 text-base sm:text-lg max-w-2xl mx-auto font-normal leading-relaxed">
-            Os estudantes do curso **Técnico em Desenvolvimento de Sistemas do SENAC MG** querem ouvir você! Cadastre sua demanda abaixo e ela será armazenada diretamente no nosso banco de dados.
+            Os estudantes do curso <strong>Técnico em Desenvolvimento de Sistemas do SENAC MG</strong> querem ouvir você! Cadastre sua demanda abaixo e ela será armazenada diretamente no nosso banco de dados.
           </p>
         </div>
       </section>
@@ -343,15 +346,56 @@ export default function App() {
                     <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
                       Seu Perfil
                     </label>
-                    <select
-                      value={formData.perfil}
-                      onChange={(e) => setFormData({...formData, perfil: e.target.value})}
-                      className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-orange-500 text-sm bg-white"
-                    >
-                      {['Morador', 'Comerciante', 'Estudante', 'Trabalhador', 'Outro'].map(p => (
-                        <option key={p} value={p}>{p}</option>
-                      ))}
-                    </select>
+                    <div className="relative">
+                      <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
+                        Seu Perfil
+                      </label>
+
+                      {/* Botão principal que imita o select */}
+                      <button
+                        type="button"
+                        onClick={() => setDropdownPerfilAberto(!dropdownPerfilAberto)}
+                        className="w-full px-4 py-3 bg-white border border-slate-300 rounded-2xl flex items-center justify-between text-sm font-medium text-slate-800 shadow-sm hover:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all"
+                      >
+                        <span>{formData.perfil}</span>
+                        {/* Ícone de seta que gira ao abrir */}
+                        <svg 
+                          className={`w-4 h-4 text-slate-500 transition-transform duration-200 ${dropdownPerfilAberto ? 'rotate-180 text-orange-500' : ''}`} 
+                          fill="none" 
+                          stroke="currentColor" 
+                          viewBox="0 0 24 24"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </button>
+
+                      {/* Menu Suspenso Customizado (Caixa Flutuante Arredondada) */}
+                      {dropdownPerfilAberto && (
+                        <div className="absolute left-0 right-0 mt-2 bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden z-30 divide-y divide-slate-100 animate-in fade-in slide-in-from-top-2 duration-150">
+                          {['Morador', 'Comerciante', 'Estudante', 'Trabalhador', 'Outro'].map((item) => {
+                            const isSelected = formData.perfil === item;
+                            return (
+                              <button
+                                key={item}
+                                type="button"
+                                onClick={() => {
+                                  setFormData({ ...formData, perfil: item });
+                                  setDropdownPerfilAberto(false);
+                                }}
+                                className={`w-full text-left px-4 py-3 text-sm transition-colors flex items-center justify-between ${
+                                  isSelected
+                                    ? 'bg-orange-50 font-bold text-orange-600'
+                                    : 'text-slate-700 hover:bg-slate-50'
+                                }`}
+                              >
+                                <span>{item}</span>
+                                {isSelected && <span className="text-orange-500 font-bold">✓</span>}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -697,7 +741,7 @@ export default function App() {
         )}
 
       </main>
-      
+
       {/* FOOTER */}
       <footer className="bg-slate-900 text-slate-400 py-8 border-t border-slate-800 text-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center md:items-end justify-between gap-6">
