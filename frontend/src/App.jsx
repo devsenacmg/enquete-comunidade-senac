@@ -214,7 +214,7 @@ export default function App() {
             </div>
 
             {/* Nav Buttons */}
-            <nav className="hidden md:flex items-center space-x-1 bg-blue-950/50 p-1.5 rounded-xl border border-blue-700/50">
+            <nav className="hidden md:flex items-center space-x-1 bg-blue-950 p-1.5 rounded-xl border border-blue-900 shadow-inner">
               <button
                 onClick={() => setActiveTab('survey')}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
