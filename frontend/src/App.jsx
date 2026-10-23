@@ -602,11 +602,13 @@ export default function App() {
 
           </div>
         )}
-
+        
         {/* TAB 3: SOBRE O CURSO */}
         {activeTab === 'about' && (
           <div className="max-w-4xl mx-auto space-y-8">
-            <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-blue-950 text-white p-8 rounded-3xl shadow-lg relative overflow-hidden">
+            
+            {/* 1. CARD SUPERIOR: PROJETO INTEGRADOR */}
+            <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-blue-950 text-white p-8 rounded-3xl shadow-lg relative overflow-hidden border border-blue-700/50">
               <div className="relative z-10 space-y-4">
                 <div className="inline-block bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
                   Projeto Integrador
@@ -619,6 +621,48 @@ export default function App() {
                 </p>
               </div>
             </div>
+
+            {/* 2. CARD INFERIOR: SENAC MINAS (Transformado em Link Clicável) */}
+            <a 
+              href="https://mg.senac.br/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="block bg-blue-900 text-white p-8 sm:p-10 rounded-3xl shadow-xl relative overflow-hidden border border-blue-700 text-center space-y-6 transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl hover:border-orange-400 group cursor-pointer"
+            >
+              
+              {/* Badge no canto esquerdo */}
+              <div className="flex justify-start">
+                <span className="bg-orange-500 text-white text-xs font-bold px-3.5 py-1.5 rounded-md uppercase tracking-wider shadow-sm">
+                  CONHEÇA O SENAC-MG
+                </span>
+              </div>
+
+              {/* Logo e Assinatura Institucional Centralizadas */}
+              <div className="flex flex-col items-center justify-center space-y-2 pt-2">
+                <div className="bg-white px-6 py-3 rounded-2xl shadow-md border border-slate-200 inline-block group-hover:bg-slate-50 transition">
+                  <span className="text-blue-900 font-black text-3xl tracking-widest block leading-none">
+                    Senac
+                  </span>
+                </div>
+                <p className="text-[11px] sm:text-xs text-blue-200 tracking-wide font-medium">
+                  CNC | Fecomércio MG | Sindicatos Empresariais | Sesc
+                </p>
+              </div>
+
+              {/* Frase Institucional */}
+              <div className="max-w-2xl mx-auto pt-2">
+                <p className="text-sm sm:text-base text-blue-100 leading-relaxed font-normal italic">
+                  "No Senac Minas, educar é transformar, e é isso que fazemos todos os dias: inspirar pessoas, impulsionar carreiras e contribuir para o desenvolvimento de todo o nosso estado."
+                </p>
+              </div>
+
+              {/* Pequeno indicador visual de que é um link */}
+              <div className="pt-2 text-xs font-semibold text-orange-400 flex items-center justify-center gap-1 opacity-90 group-hover:underline">
+                Visitar site oficial do Senac MG →
+              </div>
+
+            </a>
+
           </div>
         )}
 
