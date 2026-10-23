@@ -250,11 +250,11 @@ export default function App() {
         <div className="max-w-4xl mx-auto text-center relative z-10 space-y-4">
           <div className="inline-flex items-center gap-2 bg-orange-500/20 border border-orange-400/40 px-3.5 py-1.5 rounded-full text-orange-300 text-xs sm:text-sm font-semibold tracking-wide">
             <Sparkles className="w-4 h-4 text-orange-400" />
-            Voz da Comunidade & Supabase Conectado
+            Voz da Comunidade & SENAC-MG Conectados
           </div>
           
           <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
-            Qual problema do seu bairro pode ser <span className="text-orange-400 underline decoration-orange-500/50 underline-offset-4">resolvido com tecnologia?</span>
+            Qual problema social ou empresarial que você enfrenta no seu cotidiano que pode ser <span className="text-orange-400 underline decoration-orange-500/50 underline-offset-4">resolvido com tecnologia?</span>
           </h2>
           
           <p className="text-blue-100 text-base sm:text-lg max-w-2xl mx-auto font-normal leading-relaxed">
@@ -284,7 +284,7 @@ export default function App() {
               {/* Seção 1: Identificação */}
               <div>
                 <h4 className="text-sm font-bold text-blue-900 uppercase tracking-wider mb-4 flex items-center gap-2 border-b pb-2 border-slate-100">
-                  <Users className="w-4 h-4 text-orange-500" /> 1. Identificação e Localização
+                  <Users className="w-4 h-4 text-orange-500" /> 1. Identificação e Localização:
                 </h4>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -322,7 +322,7 @@ export default function App() {
               {/* Seção 2: O Problema */}
               <div>
                 <h4 className="text-sm font-bold text-blue-900 uppercase tracking-wider mb-4 flex items-center gap-2 border-b pb-2 border-slate-100">
-                  <ShieldAlert className="w-4 h-4 text-orange-500" /> 2. O Problema Enfrentado
+                  <ShieldAlert className="w-4 h-4 text-orange-500" /> 2. O Problema Enfrentado:
                 </h4>
 
                 <div className="space-y-4">
@@ -355,7 +355,7 @@ export default function App() {
 
                   <div>
                     <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
-                      Descreva o problema com detalhes <span className="text-orange-600">*</span>
+                      Descreva o problema com detalhes: <span className="text-orange-600">*</span>
                     </label>
                     <textarea
                       required
@@ -388,7 +388,7 @@ export default function App() {
               {/* Seção 3: Sugestão */}
               <div>
                 <h4 className="text-sm font-bold text-blue-900 uppercase tracking-wider mb-4 flex items-center gap-2 border-b pb-2 border-slate-100">
-                  <Lightbulb className="w-4 h-4 text-orange-500" /> 3. Sugestão de Solução Digital
+                  <Lightbulb className="w-4 h-4 text-orange-500" /> 3. Sugestão de Solução Digital:
                 </h4>
 
                 <div>
@@ -420,7 +420,7 @@ export default function App() {
                     </>
                   ) : (
                     <>
-                      <Send className="w-5 h-5" /> Cadastrar no Banco de Dados
+                      <Send className="w-5 h-5" /> Salvar Formulário
                     </>
                   )}
                 </button>
@@ -449,7 +449,7 @@ export default function App() {
               <div className="flex items-center gap-3">
                 <div className="bg-blue-50 border border-blue-200 rounded-xl px-4 py-2 text-center">
                   <span className="block text-2xl font-extrabold text-blue-900">{totalSubmissions}</span>
-                  <span className="text-xs text-blue-700 font-medium uppercase tracking-wider">Registos</span>
+                  <span className="text-xs text-blue-700 font-medium uppercase tracking-wider">Registros</span>
                 </div>
                 <div className="bg-orange-50 border border-orange-200 rounded-xl px-4 py-2 text-center">
                   <span className="block text-2xl font-extrabold text-orange-600">{totalVotes}</span>
