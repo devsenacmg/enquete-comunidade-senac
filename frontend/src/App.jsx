@@ -119,10 +119,23 @@ export default function App() {
       }
     };
 
-  // Votar em uma demanda (Upvote no Supabase)
+  // Votar em uma demanda com proteção contra múltiplos cliques no mesmo navegador
   const handleVotar = async (id) => {
+    // 1. Verifica se já votou nesta demanda nesta sessão/navegador
+    const votosSalvosLocalmente = JSON.parse(localStorage.getItem('votos_senac') || '{}');
+    
+    if (votosSalvosLocalmente[id] || votosRealizados[id]) {
+      showToast('⚠️ Você já votou nesta demanda anteriormente!');
+      return;
+    }
+
     try {
       await api.post(`/api/enquetes/${id}/votar`);
+      
+      // 2. Marca localmente como votado para impedir novos cliques
+      const novosVotos = { ...votosSalvosLocalmente, [id]: true };
+      localStorage.setItem('votos_senac', JSON.stringify(novosVotos));
+      
       setVotosRealizados(prev => ({ ...prev, [id]: true }));
       carregarEnquetes();
       showToast('👍 Voto registrado com sucesso!');
@@ -569,9 +582,10 @@ export default function App() {
 
                         <button
                           onClick={() => handleVotar(prob.id)}
+                          disabled={votosRealizados[prob.id] || JSON.parse(localStorage.getItem('votos_senac') || '{}')[prob.id]}
                           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border font-bold transition ${
-                            votosRealizados[prob.id]
-                              ? 'bg-emerald-600 text-white border-emerald-700'
+                            votosRealizados[prob.id] || JSON.parse(localStorage.getItem('votos_senac') || '{}')[prob.id]
+                              ? 'bg-emerald-600 text-white border-emerald-700 cursor-not-allowed opacity-90'
                               : 'bg-orange-500 text-white border-orange-600 hover:bg-orange-600'
                           }`}
                         >
