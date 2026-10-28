@@ -230,11 +230,11 @@ export default function App() {
           <div className="flex items-center justify-between h-20">
             
             <div className="flex items-center space-x-3">
-              <img 
+              {/*<img 
                 src="/src/img/logo-curso.jpg" 
                 alt="Técnico em Desenvolvimento de Sistemas" 
                 className="h-14 w-auto object-contain rounded-lg"
-              />
+              />*/}
 
               <div className="h-8 w-px bg-slate-200 hidden sm:block"></div>
 
