@@ -58,6 +58,8 @@ export default function App() {
 
   // Estado do Formulário (Mapeado para a tabela do Supabase)
   const [formData, setFormData] = useState({
+    nome: '',
+    celular: '',
     bairro: '',
     perfil: 'Morador',
     categoria: 'Infraestrutura',
@@ -95,45 +97,46 @@ export default function App() {
   }, []);
 
   // Envio do Formulário para a API
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      if (!formData.bairro || !formData.descricao) {
-        showToast('⚠️ Por favor, preencha os campos obrigatórios (*).');
-        return;
-      }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!formData.nome || !formData.celular || !formData.bairro || !formData.descricao) {
+      showToast('⚠️ Por favor, preencha os campos obrigatórios (*).');
+      return;
+    }
 
-      try {
-        setEnviando(true);
-        await api.post('/api/enquetes', formData);
+    try {
+      setEnviando(true);
+      await api.post('/api/enquetes', formData);
 
-        // Limpar formulário
-        setFormData({
-          bairro: '',
-          perfil: 'Morador',
-          categoria: 'Infraestrutura',
-          frequencia: 'Diariamente',
-          descricao: '',
-          sugestao_sistema: ''
-        });
+      // Limpar formulário
+      setFormData({
+        nome: '',
+        celular: '',
+        bairro: '',
+        perfil: 'Morador',
+        categoria: 'Infraestrutura',
+        frequencia: 'Diariamente',
+        descricao: '',
+        sugestao_sistema: ''
+      });
 
-        showToast('🎉 Sua demanda foi cadastrada com sucesso no Supabase!');
-        await carregarEnquetes();
-        
-        // Direciona para o Painel & Ideias e rola a página para o topo
-        setActiveTab('dashboard');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+      showToast('🎉 Sua demanda foi cadastrada com sucesso no Supabase!');
+      await carregarEnquetes();
+      
+      // Direciona para o Painel & Ideias e rola a página para o topo
+      setActiveTab('dashboard');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
 
-      } catch (err) {
-        console.error("Erro ao enviar demanda:", err);
-        showToast('❌ Erro ao enviar proposta. Verifique a conexão.');
-      } finally {
-        setEnviando(false);
-      }
-    };
+    } catch (err) {
+      console.error("Erro ao enviar demanda:", err);
+      showToast('❌ Erro ao enviar proposta. Verifique a conexão.');
+    } finally {
+      setEnviando(false);
+    }
+  };
 
   // Votar em uma demanda com proteção contra múltiplos cliques no mesmo navegador
   const handleVotar = async (id) => {
-    // 1. Verifica se já votou nesta demanda nesta sessão/navegador
     const votosSalvosLocalmente = JSON.parse(localStorage.getItem('votos_senac') || '{}');
     
     if (votosSalvosLocalmente[id] || votosRealizados[id]) {
@@ -144,7 +147,6 @@ export default function App() {
     try {
       await api.post(`/api/enquetes/${id}/votar`);
       
-      // 2. Marca localmente como votado para impedir novos cliques
       const novosVotos = { ...votosSalvosLocalmente, [id]: true };
       localStorage.setItem('votos_senac', JSON.stringify(novosVotos));
       
@@ -191,19 +193,15 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             
-            {/* Branding SENAC MG com Fundo Claro */}
             <div className="flex items-center space-x-3">
-              {/* Logo Oficial do Senac em Imagem */}
               <img 
                 src="https://www.mg.senac.br/image/company_logo?img_id=33792" 
                 alt="Senac em Minas" 
                 className="h-10 w-auto object-contain"
               />
 
-              {/* Divisor vertical discreto */}
               <div className="h-8 w-px bg-slate-200 hidden sm:block"></div>
 
-              {/* Textos em Azul */}
               <div>
                 <h1 className="font-bold text-lg sm:text-xl leading-tight text-slate-900 flex items-center gap-2">
                   Enquete Comunidade
@@ -217,7 +215,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* Nav Buttons */}
             <nav className="hidden md:flex items-center space-x-1 bg-blue-950 p-1.5 rounded-xl border border-blue-900 shadow-inner">
               <button
                 onClick={() => setActiveTab('survey')}
@@ -256,7 +253,6 @@ export default function App() {
 
           </div>
 
-          {/* Mobile Navigation */}
           <div className="flex md:hidden border-t border-blue-800/60 py-2 justify-around text-xs">
             <button
               onClick={() => setActiveTab('survey')}
@@ -322,13 +318,44 @@ export default function App() {
 
             <form onSubmit={handleSubmit} className="p-6 sm:p-8 space-y-6">
               
-              {/* Seção 1: Identificação */}
+              {/* Seção 1: Identificação e Localização */}
               <div>
                 <h4 className="text-sm font-bold text-blue-900 uppercase tracking-wider mb-4 flex items-center gap-2 border-b pb-2 border-slate-100">
                   <Users className="w-4 h-4 text-orange-500" /> 1. Identificação e Localização:
                 </h4>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {/* Nome */}
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
+                      Nome Completo <span className="text-orange-600">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Ex: Ana Souza"
+                      value={formData.nome}
+                      onChange={(e) => setFormData({...formData, nome: e.target.value})}
+                      className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-orange-500 text-sm outline-none transition"
+                    />
+                  </div>
+
+                  {/* Celular / WhatsApp */}
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
+                      Celular / WhatsApp <span className="text-orange-600">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Ex: (31) 99999-9999"
+                      value={formData.celular}
+                      onChange={(e) => setFormData({...formData, celular: e.target.value})}
+                      className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-orange-500 text-sm outline-none transition"
+                    />
+                  </div>
+
+                  {/* Bairro / Região */}
                   <div>
                     <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
                       Bairro / Região <span className="text-orange-600">*</span>
@@ -343,56 +370,61 @@ export default function App() {
                     />
                   </div>
 
+                  {/* Seu Perfil (Dropdown customizado) */}
                   <div>
                     <div className="relative">
-                    <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
-                      Seu Perfil
-                    </label>
+                      <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
+                        Seu Perfil
+                      </label>
 
-                    {/* Botão principal com EXATAMENTE o mesmo estilo e altura do input de Bairro */}
-                    <button
-                      type="button"
-                      onClick={() => setDropdownPerfilAberto(!dropdownPerfilAberto)}
-                      className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg flex items-center justify-between text-sm text-slate-700 outline-none transition hover:border-slate-400 focus:ring-2 focus:ring-orange-500"
-                    >
-                      <span>{formData.perfil}</span>
-                      <svg 
-                        className={`w-4 h-4 text-slate-500 transition-transform duration-200 ${dropdownPerfilAberto ? 'rotate-180 text-orange-500' : ''}`} 
-                        fill="none" 
-                        stroke="currentColor" 
-                        viewBox="0 0 24 24"
+                      <button
+                        type="button"
+                        onClick={() => setDropdownPerfilAberto(!dropdownPerfilAberto)}
+                        className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg flex items-center justify-between text-sm text-slate-700 outline-none transition hover:border-slate-400 focus:ring-2 focus:ring-orange-500"
                       >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </button>
+                        <span>{formData.perfil}</span>
+                        <svg 
+                          className={`w-4 h-4 text-slate-500 transition-transform duration-200 ${dropdownPerfilAberto ? 'rotate-180 text-orange-500' : ''}`} 
+                          fill="none" 
+                          stroke="currentColor" 
+                          viewBox="0 0 24 24"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </button>
 
-                    {/* Menu Suspenso Customizado (Arredondado quando abre) */}
-                    {dropdownPerfilAberto && (
-                      <div className="absolute left-0 right-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-xl overflow-hidden z-30 divide-y divide-slate-100">
-                        {['Morador', 'Comerciante', 'Estudante', 'Trabalhador', 'Outro'].map((item) => {
-                          const isSelected = formData.perfil === item;
-                          return (
-                            <button
-                              key={item}
-                              type="button"
-                              onClick={() => {
-                                setFormData({ ...formData, perfil: item });
-                                setDropdownPerfilAberto(false);
-                              }}
-                              className={`w-full text-left px-3.5 py-2.5 text-sm transition-colors flex items-center justify-between ${
-                                isSelected
-                                  ? 'bg-orange-50 font-bold text-orange-600'
-                                  : 'text-slate-700 hover:bg-slate-50'
-                              }`}
-                            >
-                              <span>{item}</span>
-                              {isSelected && <span className="text-orange-500 font-bold">✓</span>}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
+                      {dropdownPerfilAberto && (
+                        <>
+                          <div 
+                            className="fixed inset-0 z-20" 
+                            onClick={() => setDropdownPerfilAberto(false)} 
+                          />
+                          <div className="absolute left-0 right-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-xl overflow-hidden z-30 divide-y divide-slate-100">
+                            {['Morador', 'Comerciante', 'Estudante', 'Trabalhador', 'Outro'].map((item) => {
+                              const isSelected = formData.perfil === item;
+                              return (
+                                <button
+                                  key={item}
+                                  type="button"
+                                  onClick={() => {
+                                    setFormData({ ...formData, perfil: item });
+                                    setDropdownPerfilAberto(false);
+                                  }}
+                                  className={`w-full text-left px-3.5 py-2.5 text-sm transition-colors flex items-center justify-between ${
+                                    isSelected
+                                      ? 'bg-orange-50 font-bold text-orange-600'
+                                      : 'text-slate-700 hover:bg-slate-50'
+                                  }`}
+                                >
+                                  <span>{item}</span>
+                                  {isSelected && <span className="text-orange-500 font-bold">✓</span>}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -512,7 +544,6 @@ export default function App() {
         {activeTab === 'dashboard' && (
           <div className="space-y-8">
             
-            {/* Header do Painel */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
               <div>
                 <h3 className="text-2xl font-bold text-blue-950 flex items-center gap-2">
@@ -536,7 +567,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* Gráfico por Categoria */}
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
               <h4 className="text-base font-bold text-slate-800 mb-4 flex items-center gap-2">
                 <TrendingUp className="w-5 h-5 text-blue-900" />
@@ -570,7 +600,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* Feed de Problemas do Supabase */}
             <div className="space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-3">
                 <h4 className="text-lg font-bold text-slate-800 flex items-center gap-2">
@@ -581,7 +610,6 @@ export default function App() {
                 <div className="flex items-center gap-2">
                   <Filter className="w-4 h-4 text-slate-500" />
                   <div className="relative">
-                  {/* Botão principal do filtro */}
                     <button
                       type="button"
                       onClick={() => setDropdownFiltroAberto(!dropdownFiltroAberto)}
@@ -598,52 +626,54 @@ export default function App() {
                       </svg>
                     </button>
 
-                  {/* Menu Suspenso Customizado com bordas arredondadas */}
-                  {dropdownFiltroAberto && (
-                    <div className="absolute right-0 mt-1.5 w-52 bg-white border border-slate-200 rounded-xl shadow-xl overflow-hidden z-30 divide-y divide-slate-100">
-                      
-                      {/* Opção "Todas as Categorias" */}
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setFilterCategory('Todas');
-                          setDropdownFiltroAberto(false);
-                        }}
-                        className={`w-full text-left px-3.5 py-2.5 text-xs transition-colors flex items-center justify-between ${
-                          filterCategory === 'Todas'
-                            ? 'bg-orange-50 font-bold text-orange-600'
-                            : 'text-slate-700 hover:bg-slate-50'
-                        }`}
-                      >
-                        <span>Todas as Categorias</span>
-                        {filterCategory === 'Todas' && <span className="text-orange-500 font-bold">✓</span>}
-                      </button>
-
-                      {/* Categorias Mapeadas */}
-                      {CATEGORIES.map((cat) => {
-                        const isSelected = filterCategory === cat.id;
-                        return (
+                    {dropdownFiltroAberto && (
+                      <>
+                        <div 
+                          className="fixed inset-0 z-20" 
+                          onClick={() => setDropdownFiltroAberto(false)} 
+                        />
+                        <div className="absolute right-0 mt-1.5 w-52 bg-white border border-slate-200 rounded-xl shadow-xl overflow-hidden z-30 divide-y divide-slate-100">
                           <button
-                            key={cat.id}
                             type="button"
                             onClick={() => {
-                              setFilterCategory(cat.id);
+                              setFilterCategory('Todas');
                               setDropdownFiltroAberto(false);
                             }}
                             className={`w-full text-left px-3.5 py-2.5 text-xs transition-colors flex items-center justify-between ${
-                              isSelected
+                              filterCategory === 'Todas'
                                 ? 'bg-orange-50 font-bold text-orange-600'
                                 : 'text-slate-700 hover:bg-slate-50'
                             }`}
                           >
-                            <span>{cat.label}</span>
-                            {isSelected && <span className="text-orange-500 font-bold">✓</span>}
+                            <span>Todas as Categorias</span>
+                            {filterCategory === 'Todas' && <span className="text-orange-500 font-bold">✓</span>}
                           </button>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
+
+                          {CATEGORIES.map((cat) => {
+                            const isSelected = filterCategory === cat.id;
+                            return (
+                              <button
+                                key={cat.id}
+                                type="button"
+                                onClick={() => {
+                                  setFilterCategory(cat.id);
+                                  setDropdownFiltroAberto(false);
+                                }}
+                                className={`w-full text-left px-3.5 py-2.5 text-xs transition-colors flex items-center justify-between ${
+                                  isSelected
+                                    ? 'bg-orange-50 font-bold text-orange-600'
+                                    : 'text-slate-700 hover:bg-slate-50'
+                                }`}
+                              >
+                                <span>{cat.label}</span>
+                                {isSelected && <span className="text-orange-500 font-bold">✓</span>}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
 
@@ -690,9 +720,12 @@ export default function App() {
                       </div>
 
                       <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs text-slate-500">
-                        <div className="flex items-center gap-1.5">
-                          <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                          <span>{prob.bairro} ({prob.perfil})</span>
+                        <div className="flex flex-col">
+                          <span className="font-semibold text-slate-700">{prob.nome || 'Anônimo'}</span>
+                          <div className="flex items-center gap-1.5 text-slate-400">
+                            <MapPin className="w-3.5 h-3.5" />
+                            <span>{prob.bairro} ({prob.perfil})</span>
+                          </div>
                         </div>
 
                         <button
@@ -721,8 +754,6 @@ export default function App() {
         {/* TAB 3: SOBRE O CURSO */}
         {activeTab === 'about' && (
           <div className="max-w-4xl mx-auto space-y-8">
-            
-            {/* 1. CARD SUPERIOR: PROJETO INTEGRADOR */}
             <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-blue-950 text-white p-8 rounded-3xl shadow-lg relative overflow-hidden border border-blue-700/50">
               <div className="relative z-10 space-y-4">
                 <div className="inline-block bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
@@ -737,24 +768,19 @@ export default function App() {
               </div>
             </div>
 
-            {/* 2. CARD INFERIOR: SENAC MINAS (Igual ao padrão do primeiro card) */}
             <a 
               href="https://mg.senac.br/" 
               target="_blank" 
               rel="noopener noreferrer"
               className="block bg-gradient-to-r from-blue-900 via-indigo-900 to-blue-950 text-white p-8 sm:p-10 rounded-3xl shadow-lg relative overflow-hidden border border-blue-700/50 text-center space-y-6 transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl hover:border-orange-400 group cursor-pointer"
             >
-              
-              {/* Badge no canto esquerdo */}
               <div className="flex justify-start">
                 <span className="bg-orange-500 text-white text-xs font-bold px-3.5 py-1.5 rounded-full uppercase tracking-wider shadow-sm">
                   CONHEÇA O SENAC-MG
                 </span>
               </div>
 
-              {/* Logo SVG Oficial (Branco) e Assinatura Institucional */}
               <div className="flex flex-col items-center justify-center space-y-3 pt-2">
-                
                 <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" version="1.1" viewBox="0 0 620.92 388.4" className="w-36 h-auto drop-shadow-md">
                   <style>{`.st0 { fill: #ffffff; }`}</style>
                   <path className="st0" d="M298.55,97.3c-12.57,4.14-24.72,9.01-36.37,14.54,6.13,7.81,12.7,15.38,19.69,22.7,4.38-12.87,9.98-25.32,16.68-37.25h0Z"></path>
@@ -763,7 +789,7 @@ export default function App() {
                   <path className="st0" d="M272.8,221.45c13.52-15.88,29.03-30.6,46.21-44-11.88-8.52-22.98-17.68-33.31-27.38-8.27,22.65-12.83,46.6-12.9,71.38h0Z"></path>
                   <path className="st0" d="M285.48,129.61c5.73-11.88,12.06-23.23,18.91-34.03-14.6,4.5-28.71,9.88-42.11,16.24,6.36,8.11,13.24,15.95,20.54,23.52.88-1.91,1.75-3.83,2.66-5.73h0Z"></path>
                   <path className="st0" d="M573.25,324.34c-.61.01-1.22.03-1.84.03-25.29,0-43.63-16.18-43.63-38.49v-.49c0-21.34,18.38-38.05,41.83-38.05,1.25,0,2.47.04,3.64.11v-25.63c-1.09-.04-2.21-.04-3.34-.04-45.94,0-80.62,27.54-80.62,64.1v.47c0,35.67,35.15,63.62,80.03,63.62,1.37,0,2.62-.04,3.93-.07v-25.56h0Z"></path>
-                  <path className="st0" d="M108.75,270.63c-27.11-5.78-30.93-8.56-30.93-17.13v-.39c0-6.32,6.96-11.34,20.17-11.34,6.74,0,15.54,1.83,21.72,4.12v-27.34c-5.74-.99-14.56-2.13-21.26-2.13-32.05,0-54.88,15.66-54.88,39.34v.35c0,25.89,20.36,33.15,51.97,39.86,26.21,5.59,28.69,9.32,28.69,16.59v.37c0,7.64-8.52,12.29-22.64,12.29-17.92,0-29.8-6.14-43.91-15.84l-20.4,20.31c18.82,13.97,39.89,20.87,63.64,20.87,33.84,0,57.59-14.53,57.59-40.42v-.37c0-22.73-17.94-32.24-49.75-39.13h0Z"></path>
+                  <path className="st0" d="M108.75,270.63c-27.11-5.78-30.93-17.13-30.93-17.13v-.39c0-6.32,6.96-11.34,20.17-11.34,6.74,0,15.54,1.83,21.72,4.12v-27.34c-5.74-.99-14.56-2.13-21.26-2.13-32.05,0-54.88,15.66-54.88,39.34v.35c0,25.89,20.36,33.15,51.97,39.86,26.21,5.59,28.69,9.32,28.69,16.59v.37c0,7.64-8.52,12.29-22.64,12.29-17.92,0-29.8-6.14-43.91-15.84l-20.4,20.31c18.82,13.97,39.89,20.87,63.64,20.87,33.84,0,57.59-14.53,57.59-40.42v-.37c0-22.73-17.94-32.24-49.75-39.13h0Z"></path>
                   <path className="st0" d="M187.8,282.18c2.71-13.77,11.96-22.76,26.18-22.76s23.45,9.18,25.49,22.76h-51.67ZM213.98,235.09h0c-35.19,0-59.77,25.14-59.77,55.65v.39c0,32.71,26.83,55.25,63.15,55.25,1.04,0,4.42-.14,5.46-.16v-24.37c-.86.03-4.12.19-5.03.19-15.35,0-26.16-7.17-29.56-20.93h83.41c.2-2.81.43-4.59.43-7.6v-.38c0-30.32-17.74-58.04-58.1-58.04h.01Z"></path>
                   <path className="st0" d="M380.85,287.8c0-28.92-17.68-51.49-55.08-51.49s-55.13,22.57-55.13,51.49v56.6h34.65v-58.68c.63-10.71,4.83-23.36,20.48-23.36s20.15,12.65,20.76,23.36v58.68h34.33v-56.6h-.01Z"></path>
                   <path className="st0" d="M437.2,235.7c-1.52,0-6.76.02-8.2.06v25.87c6.68.07,15.82,1.19,19.9,3.34,5.98,3.15,9.09,8.46,9.24,15.65-8.16-.95-17.42-1.6-25.44-1.81-32.74-.84-48.92,9.98-52.17,27.31-.07.32-.12.65-.18.98-.02.11-.03.22-.05.33-.25,1.65-.4,3.39-.4,5.24v.39c0,21.18,18.72,32.73,41.48,32.73,16.71,0,28.22-5.41,36.54-13.57v12.32h33.16v-62.78c0-28.93-16.47-46.06-53.87-46.06h-.01ZM458.25,306.36h0c-2.98,15.63-19.11,17.97-22.77,18.16-26.09,1.37-27.01-16.46-18.25-21.9,11.79-7.3,41.12-3.2,41.12-3.2,0,1.05.28,3.72-.11,6.94h.01Z"></path>
@@ -774,20 +800,16 @@ export default function App() {
                 </p>
               </div>
 
-              {/* Frase Institucional */}
               <div className="max-w-2xl mx-auto pt-2">
                 <p className="text-sm sm:text-base text-blue-100 leading-relaxed font-normal italic">
                   "No Senac Minas, educar é transformar, e é isso que fazemos todos os dias: inspirar pessoas, impulsionar carreiras e contribuir para o desenvolvimento de todo o nosso estado."
                 </p>
               </div>
 
-              {/* Indicador de Link */}
               <div className="pt-2 text-xs font-semibold text-orange-400 flex items-center justify-center gap-1 opacity-90 group-hover:underline">
                 Visitar site oficial do Senac MG →
               </div>
-
             </a>
-
           </div>
         )}
 
@@ -796,8 +818,6 @@ export default function App() {
       {/* FOOTER */}
       <footer className="bg-slate-900 text-slate-400 py-8 border-t border-slate-800 text-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center md:items-end justify-between gap-6">
-          
-          {/* Lado Esquerdo: Logo no topo + Texto Institucional */}
           <div className="flex flex-col items-center md:items-start space-y-3">
             <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" version="1.1" viewBox="0 0 620.92 388.4" className="w-24 h-auto">
               <style>{`.st0 { fill: #ffffff; }`}</style>
@@ -817,7 +837,6 @@ export default function App() {
             </span>
           </div>
 
-          {/* Lado Direito: Ícones das Redes Sociais no topo + Texto do Projeto alinhado */}
           <div className="flex flex-col items-center md:items-end space-y-3">
             <div className="flex items-center space-x-2 text-slate-300">
               <a href="https://www.facebook.com/senacminas/" target="_blank" rel="noopener noreferrer" className="hover:text-orange-400 transition p-2 bg-slate-800 rounded-lg">
@@ -837,7 +856,6 @@ export default function App() {
               © 2026 — Projeto Integrador do Curso Técnico em Desenvolvimento de Sistemas.
             </span>
           </div>
-
         </div>
       </footer>
 
