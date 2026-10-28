@@ -89,6 +89,9 @@ export default function App() {
   const [dropdownFiltroAberto, setDropdownFiltroAberto] = useState(false);
   const [dropdownFrequenciaAberto, setDropdownFrequenciaAberto] = useState(false);
 
+  // Estado para controlar se o usuário aceitou os termos
+  const [aceitouTermos, setAceitouTermos] = useState(false);
+
   const showToast = (message) => {
     setToastMessage(message);
     setTimeout(() => setToastMessage(null), 4000);
@@ -129,6 +132,11 @@ export default function App() {
       return;
     }
 
+    if (!aceitouTermos) {
+      showToast('⚠️ É necessário aceitar o termo de cessão para enviar sua ideia.');
+      return;
+    }
+
     try {
       setEnviando(true);
       await api.post('/api/enquetes', formData);
@@ -144,7 +152,7 @@ export default function App() {
         descricao: '',
         sugestao_sistema: ''
       });
-
+      setAceitouTermos(false);
       showToast('🎉 Sua demanda foi cadastrada com sucesso no Supabase!');
       await carregarEnquetes();
       
@@ -592,6 +600,22 @@ export default function App() {
                     onChange={(e) => setFormData({...formData, sugestao_sistema: e.target.value})}
                     className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-orange-500 text-sm outline-none transition"
                   ></textarea>
+                </div>
+              </div>
+              
+              {/* Termo de Liberação / Consentimento */}
+              <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
+                <div className="flex items-start gap-3">
+                  <input
+                    type="checkbox"
+                    id="termoConsentimento"
+                    checked={aceitouTermos}
+                    onChange={(e) => setAceitouTermos(e.target.checked)}
+                    className="mt-1 h-4 w-4 rounded border-slate-300 text-orange-500 focus:ring-orange-500 cursor-pointer"
+                  />
+                  <label htmlFor="termoConsentimento" className="text-xs text-slate-600 leading-relaxed cursor-pointer select-none">
+                    Declaro que envio esta sugestão de forma voluntária e gratuita para fins acadêmicos. Autorizo o <strong>SENAC-MG</strong> e seus estudantes a utilizarem e desenvolverem a ideia em protótipos e softwares do Projeto Integrador, sem direito a compensação ou propriedade intelectual sobre o projeto. <span className="text-orange-600 font-bold">*</span>
+                  </label>
                 </div>
               </div>
 
