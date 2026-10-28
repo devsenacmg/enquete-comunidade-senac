@@ -87,7 +87,8 @@ export default function App() {
   // Estado dos menus suspensos (dropdowns)
   const [dropdownPerfilAberto, setDropdownPerfilAberto] = useState(false);
   const [dropdownFiltroAberto, setDropdownFiltroAberto] = useState(false);
-  
+  const [dropdownFrequenciaAberto, setDropdownFrequenciaAberto] = useState(false);
+
   const showToast = (message) => {
     setToastMessage(message);
     setTimeout(() => setToastMessage(null), 4000);
@@ -509,16 +510,70 @@ export default function App() {
                     <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
                       Com qual frequência ocorre?
                     </label>
-                    <select
-                      value={formData.frequencia}
-                      onChange={(e) => setFormData({...formData, frequencia: e.target.value})}
-                      className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-orange-500 text-sm bg-white"
-                    >
-                      <option value="Diariamente">Diariamente</option>
-                      <option value="Semanal">Semanalmente</option>
-                      <option value="Mensal">Mensalmente</option>
-                      <option value="Raramente">Raramente / Eventual</option>
-                    </select>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
+                        Com qual frequência ocorre?
+                      </label>
+                      <div className="relative">
+                        {/* Botão Principal do Dropdown */}
+                        <button
+                          type="button"
+                          onClick={() => setDropdownFrequenciaAberto(!dropdownFrequenciaAberto)}
+                          className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg flex items-center justify-between text-sm text-slate-700 outline-none transition hover:border-slate-400 focus:ring-2 focus:ring-orange-500"
+                        >
+                          <span>{formData.frequencia}</span>
+                          <svg 
+                            className={`w-4 h-4 text-slate-500 transition-transform duration-200 ${dropdownFrequenciaAberto ? 'rotate-180 text-orange-500' : ''}`} 
+                            fill="none" 
+                            stroke="currentColor" 
+                            viewBox="0 0 24 24"
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </button>
+
+                        {/* Menu Suspenso Customizado (Arredondado rounded-xl e com fundo de clique fora) */}
+                        {dropdownFrequenciaAberto && (
+                          <>
+                            {/* Camada para fechar ao clicar fora */}
+                            <div 
+                              className="fixed inset-0 z-20" 
+                              onClick={() => setDropdownFrequenciaAberto(false)} 
+                            />
+                            
+                            {/* Opções com cantos arredondados e efeito visual idêntico ao "Seu Perfil" */}
+                            <div className="absolute left-0 right-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-xl overflow-hidden z-30 divide-y divide-slate-100">
+                              {[
+                                'Diariamente',
+                                'Semanalmente',
+                                'Mensalmente',
+                                'Raramente / Eventual'
+                              ].map((item) => {
+                                const isSelected = formData.frequencia === item;
+                                return (
+                                  <button
+                                    key={item}
+                                    type="button"
+                                    onClick={() => {
+                                      setFormData({ ...formData, frequencia: item });
+                                      setDropdownFrequenciaAberto(false);
+                                    }}
+                                    className={`w-full text-left px-3.5 py-2.5 text-sm transition-colors flex items-center justify-between ${
+                                      isSelected
+                                        ? 'bg-orange-50 font-bold text-orange-600'
+                                        : 'text-slate-700 hover:bg-slate-50'
+                                    }`}
+                                  >
+                                    <span>{item}</span>
+                                    {isSelected && <span className="text-orange-500 font-bold">✓</span>}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
