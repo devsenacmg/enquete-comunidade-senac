@@ -507,9 +507,6 @@ export default function App() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
-                      Com qual frequência ocorre?
-                    </label>
                     <div>
                       <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
                         Com qual frequência ocorre?
