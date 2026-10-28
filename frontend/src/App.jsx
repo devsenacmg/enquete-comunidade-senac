@@ -35,6 +35,22 @@ const CATEGORIES = [
   { id: 'Outros', label: 'Outros Assuntos', icon: HelpCircle, color: 'text-slate-600 bg-slate-50 border-slate-200' },
 ];
 
+// Função utilitária para aplicar máscara e limitar telefone a apenas dígitos
+const mascaraCelular = (valor) => {
+  const apenasNumeros = valor.replace(/\D/g, '');
+  const numeroLimitado = apenasNumeros.slice(0, 11);
+
+  if (numeroLimitado.length > 7) {
+    return `(${numeroLimitado.slice(0, 2)}) ${numeroLimitado.slice(2, 7)}-${numeroLimitado.slice(7)}`;
+  } else if (numeroLimitado.length > 2) {
+    return `(${numeroLimitado.slice(0, 2)}) ${numeroLimitado.slice(2)}`;
+  } else if (numeroLimitado.length > 0) {
+    return `(${numeroLimitado}`;
+  }
+  
+  return '';
+};
+
 export default function App() {
   // Estados de Dados da API
   const [enquetes, setEnquetes] = useState([]);
@@ -68,7 +84,7 @@ export default function App() {
     sugestao_sistema: ''
   });
 
-  // Estado do menu aberto ou fechado
+  // Estado dos menus suspensos (dropdowns)
   const [dropdownPerfilAberto, setDropdownPerfilAberto] = useState(false);
   const [dropdownFiltroAberto, setDropdownFiltroAberto] = useState(false);
   
@@ -99,8 +115,16 @@ export default function App() {
   // Envio do Formulário para a API
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.nome || !formData.celular || !formData.bairro || !formData.descricao) {
+
+    const digitosCelular = formData.celular.replace(/\D/g, '');
+
+    if (!formData.nome || !digitosCelular || !formData.bairro || !formData.descricao) {
       showToast('⚠️ Por favor, preencha os campos obrigatórios (*).');
+      return;
+    }
+
+    if (digitosCelular.length < 10) {
+      showToast('⚠️ Por favor, insira um número de celular válido com DDD.');
       return;
     }
 
@@ -325,7 +349,7 @@ export default function App() {
                 </h4>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* Nome */}
+                  {/* Nome Completo */}
                   <div>
                     <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
                       Nome Completo <span className="text-orange-600">*</span>
@@ -349,8 +373,12 @@ export default function App() {
                       type="text"
                       required
                       placeholder="Ex: (31) 99999-9999"
+                      maxLength={15}
                       value={formData.celular}
-                      onChange={(e) => setFormData({...formData, celular: e.target.value})}
+                      onChange={(e) => {
+                        const valorFormatado = mascaraCelular(e.target.value);
+                        setFormData({ ...formData, celular: valorFormatado });
+                      }}
                       className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-orange-500 text-sm outline-none transition"
                     />
                   </div>
