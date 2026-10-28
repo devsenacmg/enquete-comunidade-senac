@@ -92,6 +92,9 @@ export default function App() {
   // Estado para controlar se o usuário aceitou os termos
   const [aceitouTermos, setAceitouTermos] = useState(false);
 
+  // Estado para controlar o modal flutuante dos termos
+  const [modalTermoAberto, setModalTermoAberto] = useState(false);
+
   const showToast = (message) => {
     setToastMessage(message);
     setTimeout(() => setToastMessage(null), 4000);
@@ -605,19 +608,82 @@ export default function App() {
               
               {/* Termo de Liberação / Consentimento */}
               <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
-                <div className="flex items-start gap-3">
+                
+                {/* Título com Link para abrir o Modal */}
+                <div className="text-xs">
+                  <button
+                    type="button"
+                    onClick={() => setModalTermoAberto(true)}
+                    className="font-bold text-blue-900 hover:text-orange-600 underline underline-offset-2 transition-colors cursor-pointer text-left"
+                  >
+                    Termo de Consentimento e Cessão de Ideias
+                  </button>
+                </div>
+
+                {/* Checkbox e texto explicativo resumido */}
+                <div className="flex items-start gap-3 pt-1">
                   <input
                     type="checkbox"
                     id="termoConsentimento"
                     checked={aceitouTermos}
                     onChange={(e) => setAceitouTermos(e.target.checked)}
-                    className="mt-1 h-4 w-4 rounded border-slate-300 text-orange-500 focus:ring-orange-500 cursor-pointer"
+                    className="mt-0.5 h-4 w-4 rounded border-slate-300 text-orange-500 focus:ring-orange-500 cursor-pointer shrink-0"
                   />
                   <label htmlFor="termoConsentimento" className="text-xs text-slate-600 leading-relaxed cursor-pointer select-none">
                     Declaro que envio esta sugestão de forma voluntária e gratuita para fins acadêmicos. Autorizo o <strong>SENAC-MG</strong> e seus estudantes a utilizarem e desenvolverem a ideia em protótipos e softwares do Projeto Integrador, sem direito a compensação ou propriedade intelectual sobre o projeto. <span className="text-orange-600 font-bold">*</span>
                   </label>
                 </div>
               </div>
+
+              {/* Modal Flutuante do Termo de Consentimento */}
+              {modalTermoAberto && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn">
+                  {/* Card Modal */}
+                  <div className="bg-white w-full max-w-lg rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh]">
+                    
+                    {/* Header do Modal */}
+                    <div className="bg-blue-950 p-5 text-white flex items-center justify-between border-b border-orange-500">
+                      <h3 className="font-bold text-base flex items-center gap-2">
+                        <ShieldAlert className="w-5 h-5 text-orange-400" />
+                        Termo de Consentimento e Cessão de Ideias
+                      </h3>
+                      <button
+                        onClick={() => setModalTermoAberto(false)}
+                        className="text-slate-300 hover:text-white text-lg font-bold p-1 rounded-lg hover:bg-blue-900 transition"
+                      >
+                        ✕
+                      </button>
+                    </div>
+
+                    {/* Conteúdo do Termo */}
+                    <div className="p-6 space-y-4 overflow-y-auto text-sm text-slate-700 leading-relaxed">
+                      <p className="bg-orange-50 border-l-4 border-orange-500 p-3 text-xs text-orange-900 font-medium rounded-r-lg">
+                        Leia atentamente os termos de utilização da sua proposta antes de aceitar.
+                      </p>
+
+                      <p className="text-justify">
+                        Ao enviar este formulário, declaro e concordo que a proposta/ideia descrita é apresentada de forma voluntária, gratuita e não confidencial, destinando-se exclusivamente ao uso acadêmico no âmbito do Projeto Integrador do Curso Técnico em Desenvolvimento de Sistemas do SENAC-MG.
+                      </p>
+
+                      <p className="text-justify">
+                        Autorizo expressamente o SENAC-MG e seus alunos a utilizar, adaptar, desenvolver e implementar as sugestões apresentadas em projetos, protótipos e softwares, sem que isso gere qualquer direito a retribuição financeira, royalties, compensação ou alegação de propriedade intelectual por minha parte.
+                      </p>
+                    </div>
+
+                    {/* Footer com Botão OK */}
+                    <div className="p-4 bg-slate-50 border-t border-slate-100 flex justify-end">
+                      <button
+                        type="button"
+                        onClick={() => setModalTermoAberto(false)}
+                        className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-6 py-2.5 rounded-xl shadow-md transition text-sm flex items-center gap-2"
+                      >
+                        Entendi / OK
+                      </button>
+                    </div>
+
+                  </div>
+                </div>
+              )}
 
               {/* Botão de Envio */}
               <div className="pt-4">
