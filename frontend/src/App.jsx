@@ -230,11 +230,11 @@ export default function App() {
           <div className="flex items-center justify-between h-20">
             
             <div className="flex items-center space-x-3">
-              {/*<img 
-                src="https://www.mg.senac.br/image/company_logo?img_id=33792" 
-                alt="Senac em Minas" 
-                className="h-10 w-auto object-contain"
-              />*/}
+              <img 
+                src="/src/img/logo-curso.jpg" 
+                alt="Técnico em Desenvolvimento de Sistemas" 
+                className="h-14 w-auto object-contain rounded-lg"
+              />
 
               <div className="h-8 w-px bg-slate-200 hidden sm:block"></div>
 
