@@ -295,7 +295,7 @@ export default function App() {
           </div>
           
           <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
-            Qual problema você enfrenta no seu cotidiano que pode ser <span className="text-orange-400 underline decoration-orange-500/50 underline-offset-4">resolvido com tecnologia?</span>
+            Qual <span className="text-orange-400 underline decoration-orange-500/50 underline-offset-4">problema</span> você enfrenta no seu cotidiano que pode ser <br className="hidden sm:inline" /><span className="text-orange-400 underline decoration-orange-500/50 underline-offset-4">resolvido com tecnologia?</span>
           </h2>
           
           <p className="text-blue-100 text-base sm:text-lg max-w-2xl mx-auto font-normal leading-relaxed">
@@ -498,7 +498,7 @@ export default function App() {
                     </>
                   ) : (
                     <>
-                      <Send className="w-5 h-5" /> Salvar Formulário
+                      <Send className="w-5 h-5" /> Enviar Formulário
                     </>
                   )}
                 </button>
